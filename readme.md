@@ -7,6 +7,8 @@ devtools::install_github('mugu12345/mg.code')
 
 
 library(mg.code)
+
+
 1、森林图的绘制
 #data preparation：单因素/多因素cox分析与预后的关系
 data.sig
