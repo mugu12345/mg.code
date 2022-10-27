@@ -1,0 +1,9 @@
+miRNAName2miRNAID=function(miRNAName){
+  #miRNAName=c('hsa-miR-4419a')
+  load(paste0(MG_Grobal_baseFolder,'/source/miRbase.hsa.idmap.RData'))
+  mid=miRbase.has.idmap$IDmap[match(miRNAName,miRbase.has.idmap$IDmap[,2]),1]
+  if(sum(is.na(mid))>0){
+    mid[is.na(mid)]=miRbase.has.idmap$IDAliases[match(miRNAName[is.na(mid)],miRbase.has.idmap$IDAliases[,2]),1]
+  }
+  return(cbind(SearchID=miRNAName,miRbaseID=mid))
+}

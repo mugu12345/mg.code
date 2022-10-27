@@ -1,0 +1,16 @@
+mg_gene2PromoterCpGs=function(geneSymbols){
+  #geneSymbols=c('TP53')
+  load(paste0(MG_Grobal_baseFolder,'/source/gencode.v33.id.tab.RData'))
+  enst=gencode.v33.id.tab[gencode.v33.id.tab[,1]%in%geneSymbols,]
+  ensg=gencode.v33.id.tab[gencode.v33.id.tab[,2]%in%geneSymbols,]
+  symbol=gencode.v33.id.tab[gencode.v33.id.tab[,3]%in%geneSymbols,]
+  mp=rbind(cbind(enst,Gene=geneSymbols[match(enst[,1],geneSymbols)])
+           ,cbind(ensg,Gene=geneSymbols[match(ensg[,2],geneSymbols)])
+           ,cbind(symbol,Gene=geneSymbols[match(symbol[,3],geneSymbols)]))
+  load(paste0(MG_Grobal_baseFolder,'/source/genome_info/cpg.450.27.cpg2enstbytss.Rdata'))
+  cpg.enst=cpg2enstbytss[cpg2enstbytss[,2]%in%mp[,1],]
+  mp.al=cbind(cpg.enst,mp[match(cpg.enst[,2],mp[,1]),])
+  mp.al=mp.al[,c(1,2,3,9)]
+  colnames(mp.al)=c('CpG','ENST','TSS','Gene')
+  return(mp.al)
+}

@@ -1,0 +1,24 @@
+mg_surv_pROC_smooth_trycatch=function(status,score,col,add=T){
+  dat1=data.frame(year=status,score=score)
+  #print(status)
+  tryCatch({
+    if(add){
+      #print('====')
+      pt1=lines.roc(year~score,dat1,col=col,smooth=T)
+    }else{
+      pt1=plot.roc(year~score,dat1,col=col,smooth=T)
+    }
+    #print(pt1)
+    return(pt1)
+  },error = function(e) {
+    #print('eeee')
+    print(conditionMessage(e))
+    if(add){
+      pt1=lines.roc(year~score,dat1,col=col,smooth=F)
+    }else{
+      pt1=plot.roc(year~score,dat1,col=col,smooth=F)
+    }
+    return(pt1)
+    #save(e,file=paste0(MG_Grobal_outFolder,'/',opt$errorfile))
+  })
+}

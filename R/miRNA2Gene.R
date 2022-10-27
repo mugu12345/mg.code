@@ -1,0 +1,25 @@
+miRNA2Gene=function(miRNAs,type=0){
+  mi2gene=NULL
+  if(type==0){
+    mi=miRNAName2miRNAID(miRNAs)
+    if(sum(!is.na(mi[,2]))>0){
+      if(sum(!is.na(mi[,2]))>1){
+        mi=mi[!is.na(mi[,2]),]
+      }else{
+        mi=t(mi[!is.na(mi[,2]),])
+      }
+      load(paste0(MG_Grobal_baseFolder,'/source/MIMAT2MG_ID.RData'))
+      mi2gene=MIMAT2MG_ID[MIMAT2MG_ID[,1]%in%mi[,2],]
+      mi2gene[,1]=mi[match(mi2gene[,1],mi[,2]),1]
+    }
+  }else{
+    load(paste0(MG_Grobal_baseFolder,'/source/MIMAT2MG_ID.RData'))
+    mi2gene=MIMAT2MG_ID[MIMAT2MG_ID[,1]%in%miRNAs,]
+  }
+  if(!is.null(mi2gene)){
+    if(nrow(mi2gene)>0){
+      mi2gene[,2]=mg_idconvert_local_MGID2SYMBOL(mi2gene[,2])[,2]
+    }
+  }
+  return(mi2gene)
+}

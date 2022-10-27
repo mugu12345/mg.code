@@ -1,0 +1,29 @@
+mg_svm_plot_muti_roc=function(svm_predict_result_list,line_cols='blue'){
+  library("pROC")
+  labs=c()
+  line_cols=line_cols
+  if(length(line_cols)<length(svm_predict_result_list)){
+    line_cols=rainbow(length(svm_predict_result_list))
+  }
+  for(i in 1:length(svm_predict_result_list)){
+    svm_predict_result=svm_predict_result_list[[i]]
+    roc.dat=roc(svm_predict_result$ROC[[1]]$label[!is.na(svm_predict_result$ROC[[1]]$label)],
+                svm_predict_result$ROC[[1]]$predictions[!is.na(svm_predict_result$ROC[[1]]$label)])
+    labs=c(labs,paste0(names(svm_predict_result_list)[i],':',round(svm_predict_result$ROC[[1]]$AUC[1],2)))
+    plot.roc(roc.dat
+             ,ylim=c(0,1)
+             ,xlim=c(1,0),
+             add=(i!=1),
+             auc.polygon=F,
+             smooth=T,
+             #auc.polygon.col=fill_col,
+             print.auc=F,
+             #ci=TRUE,
+             col=line_cols[i],
+             lwd=2,
+             #identity.lty=5,
+             legacy.axes=T
+    )
+  }
+  legend('bottomright',legend=labs,col=line_cols,pch = 20,title = 'AUC',cex = 0.8)
+}

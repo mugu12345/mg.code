@@ -1,0 +1,10 @@
+getTCGARPPABySamples=function(samples=NULL){
+  rppa=readMatrix(paste0(MG_Grobal_DBPath,'/TCGA/Matrix/TCGA_RPPA_Merge_all.txt'))
+  row.names(rppa)=substr(row.names(rppa),1,15)
+  rppa=rppa[,-c(1,2,3)]  
+  if(is.null(samples)){
+    return(rppa)
+  }else{
+    return(rppa[match(samples,row.names(rppa)),])
+  }
+}

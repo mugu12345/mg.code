@@ -1,0 +1,14 @@
+gene2miRNA=function(mRNAs){
+  #mRNAs=c('TP53')
+  mi2gene=NULL
+  id_mp=mg_idconvert_local(mRNAs)
+  if(sum(!is.na(id_mp$IDMap[,5]))>0){
+    id_mp=id_mp$IDMap[!is.na(id_mp$IDMap[,5]),]
+    load(paste0(MG_Grobal_baseFolder,'/source/MIMAT2MG_ID.RData'))
+    mi2gene=MIMAT2MG_ID[MIMAT2MG_ID[,2]%in%id_mp[,5],]
+    mi2gene[,2]=as.character(id_mp[match(mi2gene[,2],id_mp[,5]),1])
+    mi=miRNAID2miRNAName(unique(mi2gene[,1]))
+    mi2gene=cbind(mi2gene,mi[match(mi2gene[,1],mi[,1]),2])
+  }
+  return(mi2gene)
+}

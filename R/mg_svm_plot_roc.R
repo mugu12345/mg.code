@@ -1,0 +1,53 @@
+mg_svm_plot_roc=function(svm_predict_result,line_col='blue',fill_col='gainsboro'){
+  library("pROC")
+  aucs=c()
+  if(length(svm_predict_result$ROC)==2){
+    roc.dat=roc(svm_predict_result$ROC[[1]]$label[!is.na(svm_predict_result$ROC[[1]]$label)],
+                svm_predict_result$ROC[[1]]$predictions[!is.na(svm_predict_result$ROC[[1]]$label)])
+    aucs=c(aucs,as.numeric(roc.dat$auc))
+    plot.roc(roc.dat
+             ,ylim=c(0,1)
+             ,xlim=c(1,0),
+             add=F,
+             auc.polygon=T,
+             smooth=T,
+             auc.polygon.col=fill_col,
+             print.auc=T,
+             #ci=TRUE,
+             col=line_col,
+             lwd=2,
+             #identity.lty=5,
+             legacy.axes=T
+    )
+  }else{
+    line_cols=line_col
+    if(length(line_col)<length(svm_predict_result$ROC)){
+      line_cols=rainbow(length(svm_predict_result$ROC))
+    }
+    labs=c()
+    for(i in 1:length(svm_predict_result$ROC)){
+
+      roc.dat=roc(svm_predict_result$ROC[[i]]$label[!is.na(svm_predict_result$ROC[[i]]$label)],
+                  svm_predict_result$ROC[[i]]$predictions[!is.na(svm_predict_result$ROC[[i]]$label)])
+
+      labs=c(labs,paste0(names(svm_predict_result$ROC)[i],':',round(as.numeric(roc.dat$auc),2)))
+      plot.roc(roc.dat
+               ,ylim=c(0,1)
+               ,xlim=c(1,0),
+               add=(i!=1),
+               auc.polygon=F,
+               smooth=T,
+               #auc.polygon.col=fill_col,
+               print.auc=F,
+               #ci=TRUE,
+               col=line_cols[i],
+               lwd=2,
+               #identity.lty=5,
+               legacy.axes=T
+      )
+    }
+    legend('bottomright',legend=labs,col=line_cols,pch = 20,title = 'AUC',cex = 0.8)
+    aucs=c(aucs,as.numeric(roc.dat$auc))
+  }
+  return(aucs)
+}

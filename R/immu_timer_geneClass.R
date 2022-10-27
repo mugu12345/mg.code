@@ -1,0 +1,10 @@
+immu_timer_geneClass=function(){
+  baseFolder=paste0(MG_Grobal_baseFolder,'/source')
+  immuneEstimation=readMatrix(paste0(baseFolder,'/timmer_immune_Genes_pmid_27549193.txt')
+                            ,row=F)
+  #head(immuneEstimation)
+  #rnames=gsub('\\.','-',colnames(exp))
+  #comm=intersect(row.names(immuneEstimation),rnames)
+  #immuneEstimation=immuneEstimation[match(comm,row.names(immuneEstimation)),]
+  return(immuneEstimation)
+}

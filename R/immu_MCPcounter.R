@@ -1,0 +1,13 @@
+immu_MCPcounter=function(exp,isTCGA=T){
+  baseFolder=paste0(MG_Grobal_baseFolder,'/source')
+  mcpEstimates=MCPcounter::MCPcounter.estimate(exp,featuresType="HUGO_symbols",
+                           probesets=read.table(paste0(baseFolder,'/immu_mcp_probes.txt'),sep="\t",stringsAsFactors=FALSE,colClasses="character"),
+                           genes=read.table(paste0(baseFolder,'/immu_mcp_genes.txt'),sep="\t",stringsAsFactors=FALSE,header=TRUE,colClasses="character",check.names=FALSE)
+  )
+  mcpEstimates=t(mcpEstimates)
+  if(isTCGA){
+    rnames=gsub('\\.','-',row.names(mcpEstimates)) 
+    row.names(mcpEstimates)=rnames
+  }
+  return(mcpEstimates)
+}
